@@ -1,5 +1,6 @@
 //  Entry point for the page, used to place the content of each page
-const Content = () => {
+
+const Content = async () => {
 	return (
 		<>
 			<h1>home content</h1>

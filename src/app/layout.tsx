@@ -1,31 +1,29 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import Nav from "@/modules/components/nav";
+import React, { Suspense } from "react";
+import RouteListener from "@/modules/components/RouteListener";
 import "./globals.css";
-
-const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
-	subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
 	title: "Music Picnic With Me!",
 	description: "go picnic with playlist",
 };
 
-export default function RootLayout({
-	children,
-}: Readonly<{
+// 定義 Layout Props 型別
+interface RootLayoutProps {
 	children: React.ReactNode;
-}>) {
+}
+
+export default function RootLayout({ children }: RootLayoutProps) {
 	return (
-		<html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+		<html lang="en" className="h-full antialiased">
 			{/* Place the content into children according to the URL path */}
-			<body className="min-h-full flex flex-col">{children}</body>
+			<body className="h-full">
+				<Nav />
+				<Suspense fallback={null}>
+					<RouteListener>{children}</RouteListener>
+				</Suspense>
+			</body>
 		</html>
 	);
 }
