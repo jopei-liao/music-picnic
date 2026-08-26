@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import Popup from "@/modules/components/Popup";
-import { generateNumericId } from "@/app/utils/id"; // <-- 引入共用函式
+import Popup from "@/modules/components/popup";
+import { generateNumericId } from "@/utils/id";
 
 //  Entry point for the page, used to place the content of each page
 const Content = () => {
@@ -20,7 +20,7 @@ const Content = () => {
 		setPopupState(prev => ({ ...prev, isOpen: false }));
 	};
 
-	const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		// Spotify Regex 解析驗證
@@ -40,25 +40,44 @@ const Content = () => {
 
 		// 3. 驗證成功，擷取 ID
 		const playlistId = match[1];
+		const newId = generateNumericId();
 
-		// 4. 模擬組裝我們要存進資料庫的資料物件
-		const newPlaylistData = {
-			id: generateNumericId(), // 產生隨機 ID
-			playlistId: playlistId,
-			rawUrl: url,
-			createdAt: new Date().toISOString(),
-		};
+		try {
+			// 2. 發送 POST 請求至後端 API
+			const response = await fetch("/api/playlists", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					id: newId,
+					playlistId: playlistId,
+					rawUrl: url,
+				}),
+			});
 
-		console.log("🎉 成功擷取歌單資料，準備寫入：", newPlaylistData);
+			const result = await response.json();
 
-		// 5. 清除輸入框與錯誤訊息，並跳出成功 Popup
-		setErrorMessage("");
-		setUrl("");
-		setPopupState({
-			isOpen: true,
-			status: "success",
-			message: "感謝你的分享！",
-		});
+			if (!response.ok) {
+				throw new Error(result.error || "寫入資料庫失敗");
+			}
+
+			// 3. 成功後清空表單並跳出成功 Popup
+			setErrorMessage("");
+			setUrl("");
+			setPopupState({
+				isOpen: true,
+				status: "success",
+				message: "感謝分享！",
+			});
+		} catch (error: unknown) {
+			const errMsg = error instanceof Error ? error.message : "連線至伺服器失敗，請稍後再試。";
+			setPopupState({
+				isOpen: true,
+				status: "error",
+				message: errMsg,
+			});
+		}
 	};
 	return (
 		<>

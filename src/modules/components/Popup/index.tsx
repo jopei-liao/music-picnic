@@ -26,7 +26,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, status, message, onClose }) => {
 				</div>
 
 				{/* 標題 */}
-				<h3 className="mb-2 text-xl font-bold">{isSuccess ? "分享成功！" : "發生錯誤"}</h3>
+				<h3 className="mb-2 text-xl font-bold">{isSuccess ? "登愣！" : "逼逼！"}</h3>
 
 				{/* 提示訊息 */}
 				<p className="mb-6 text-sm text-light-beige/70 leading-relaxed">{message}</p>
