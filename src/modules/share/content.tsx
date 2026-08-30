@@ -1,9 +1,10 @@
+//  Entry point for the page, used to place the content of each page
 "use client";
 import { useState } from "react";
 import Popup from "@/modules/components/popup";
 import { generateNumericId } from "@/utils/id";
+import LoadingTrigger from "@/modules/components/LoadingTrigger";
 
-//  Entry point for the page, used to place the content of each page
 const Content = () => {
 	// 定義輸入框的狀態 (TypeScript 會自動推導 url 為 string 型別)
 	const [url, setUrl] = useState<string>("");
@@ -81,6 +82,8 @@ const Content = () => {
 	};
 	return (
 		<>
+			{/* 當本頁載入與渲染完成時，觸發 Loading 退場 */}
+			<LoadingTrigger />
 			<h1 className="text-light-beige text-3xl md:text-4xl font-bold text-center mb-2 leading-12">
 				送出你的私藏歌單，
 				<br />
@@ -110,7 +113,7 @@ const Content = () => {
 
 				<button
 					type="submit"
-					className="w-full cursor-pointer rounded-lg bg-light-beige px-4 py-3 font-bold text-[.875em] md:text-base text-dark-gray hover:bg-dark-beige hover:text-light-beige active:scale-[0.98] transition-all duration-200 shadow-lg"
+					className="w-full cursor-pointer rounded-lg bg-light-beige px-4 py-3 font-bold text-[.875em] md:text-base text-dark-gray hover:bg-dark-beige hover:text-white active:scale-[0.98] transition-all duration-200 shadow-lg"
 				>
 					送出
 				</button>

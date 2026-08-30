@@ -36,7 +36,7 @@ export async function POST(request: Request) {
 
 		// 步驟 C: 若已存在，回傳 409 Conflict 錯誤
 		if (existingPlaylist) {
-			return NextResponse.json({ error: "這首播放清單已經有人分享過囉！" }, { status: 409 });
+			return NextResponse.json({ error: "這個播放清單已經有人分享過囉！" }, { status: 409 });
 		}
 
 		// 步驟 D: 若不存在，正常寫入資料庫
