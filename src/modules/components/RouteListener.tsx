@@ -1,31 +1,17 @@
-// modules/components/RouteListener.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
-import Loading from "./loading/";
+import React, { useEffect } from "react";
+import { useLoading } from "@/context/LoadingContext";
 
 interface RouteListenerProps {
 	children: React.ReactNode;
 }
 
 export default function RouteListener({ children }: RouteListenerProps) {
-	const [isLoading, setIsLoading] = useState<boolean>(true);
-	const pathname = usePathname();
-	const searchParams = useSearchParams();
+	const { startLoading } = useLoading();
 
-	// First loading or pathname change done
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			setIsLoading(false);
-		}, 3500);
-		return () => clearTimeout(timer);
-	}, [pathname, searchParams]);
-
-	// Listen for subsequent client-side navigation clicks
 	useEffect(() => {
 		const handleAnchorClick = (event: MouseEvent) => {
-			// 斷言 event.target 為 HTMLElement，以便使用 closest 方法
 			const target = (event.target as HTMLElement).closest("a");
 			if (!target) return;
 
@@ -37,22 +23,16 @@ export default function RouteListener({ children }: RouteListenerProps) {
 				return;
 			}
 
-			// 如果點擊的是目前所在的路由，就不重複跑 Loading
+			// 點擊當前相同頁面不重複觸發
 			if (href === window.location.pathname) return;
 
-			// 點擊有效連結時，再次開啟 Loading
-			setIsLoading(true);
+			// 點擊有效連結時啟動 Loading
+			startLoading();
 		};
 
 		document.addEventListener("click", handleAnchorClick);
 		return () => document.removeEventListener("click", handleAnchorClick);
-	}, []);
+	}, [startLoading]);
 
-	return (
-		<>
-			{isLoading && <Loading />}
-
-			<div className={`min-h-screen px-4 flex items-center justify-center transition-opacity duration-150 ease-[ease]`}>{children}</div>
-		</>
-	);
+	return <div className="min-h-screen px-4 flex items-center justify-center transition-opacity duration-150">{children}</div>;
 }

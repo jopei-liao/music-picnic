@@ -1,4 +1,5 @@
 //  Entry point for the page, used to place the content of each page
+import LoadingTrigger from "@/modules/components/LoadingTrigger";
 import { Noto_Sans_TC, Roboto } from "next/font/google";
 
 export const notoFont = Noto_Sans_TC({
@@ -10,9 +11,11 @@ export const robotoFont = Roboto({
 	subsets: ["latin"],
 });
 
-const Content = async () => {
+const Content = () => {
 	return (
 		<>
+			{/* 當本頁載入與渲染完成時，觸發 Loading 退場 */}
+			<LoadingTrigger />
 			<div className="about px-5 md:px-10 pt-30 md:pt-40 pb-[15vh] text-center">
 				<div className="mb-10">
 					<p className={`text-dark-beige text-[.875em] md:text-sm leading-8 ${notoFont.className}`}>

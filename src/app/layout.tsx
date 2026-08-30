@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Nav from "@/modules/components/nav";
 import React, { Suspense } from "react";
 import RouteListener from "@/modules/components/RouteListener";
+import { LoadingProvider } from "@/context/LoadingContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -9,20 +10,19 @@ export const metadata: Metadata = {
 	description: "go picnic with playlist",
 };
 
-// 定義 Layout Props 型別
-interface RootLayoutProps {
-	children: React.ReactNode;
-}
-
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en" className="h-full antialiased">
-			{/* Place the content into children according to the URL path */}
 			<body className="h-full">
-				<Nav />
-				<Suspense fallback={null}>
-					<RouteListener>{children}</RouteListener>
-				</Suspense>
+				{/* 全域載入狀態 Provider，包裹所有需要存取 Loading 的元件 */}
+				<LoadingProvider>
+					<Nav />
+
+					{/* Suspense 保護：避免 useSearchParams 在建置時報錯 */}
+					<Suspense fallback={null}>
+						<RouteListener>{children}</RouteListener>
+					</Suspense>
+				</LoadingProvider>
 			</body>
 		</html>
 	);

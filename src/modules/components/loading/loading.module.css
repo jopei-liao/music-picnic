@@ -1,3 +1,9 @@
+.fade {
+	pointer-events: none;
+	transform: translateY(-120%);
+	transition: 2.5s;
+}
+
 .box {
 	&::after {
 		content: "";
@@ -7,9 +13,8 @@
 		min-height: 300vw;
 		background-color: #393e46;
 		animation-name: rotate;
-		animation: rotate 3.5s 1s linear alternate;
-		animation-iteration-count: 1;
-		bottom: -8vh;
+		animation: aniRotate 8s infinite alternate;
+		bottom: 8vh;
 		border-radius: 45%;
 		transform: translate(-50%, 0) rotateZ(0deg);
 	}
@@ -21,14 +26,11 @@
 	}
 }
 
-@keyframes rotate {
+@keyframes aniRotate {
 	0% {
 		transform: translate(-50%, 0) rotateZ(0deg);
 	}
-	33% {
-		transform: translate(-50%, -30%) rotateZ(270deg);
-	}
 	100% {
-		transform: translate(-50%, -100%) rotateZ(360deg);
+		transform: translate(-50%, 0%) rotateZ(270deg);
 	}
 }
